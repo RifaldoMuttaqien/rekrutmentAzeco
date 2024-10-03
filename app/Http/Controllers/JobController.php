@@ -91,7 +91,7 @@ class JobController extends Controller
 
     public function jumlahApply()
     {
-        // Menghitung jumlah pelamar untuk setiap pekerjaan
+        
         $applications = Job::leftJoin('applications', 'job.id', '=', 'applications.job_id')
                             ->leftJoin('applicants', 'applications.applicant_id', '=', 'applicants.id')
                             ->leftJoin('users', 'applicants.user_id', '=', 'users.id')
@@ -116,20 +116,20 @@ class JobController extends Controller
         // Ambil ID user yang sedang login
         $applicant_id = Auth::id();
     
-        // Cek apakah user sudah pernah melamar pekerjaan ini
+     
         $cekmelamar = Applications::where('job_id', $job_id)
                                    ->where('applicant_id', $applicant_id)
                                    ->first();
     
-        // Jika sudah pernah melamar, kembalikan pesan error
+       
         if($cekmelamar){
             return redirect()->route('pelamar.index')->with('error', 'Anda sudah melamar pada posisi ini!');
         }
     
-        // Ambil data applicant berdasarkan user_id
+    
         $applicants = Applicants::where('user_id', $applicant_id)->firstOrFail();
     
-        // Simpan aplikasi jika belum pernah melamar
+      
         Applications::create([
             'job_id' => $job_id,
             'applicant_id' => $applicants->id,
